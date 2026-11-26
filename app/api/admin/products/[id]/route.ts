@@ -2,7 +2,7 @@ import { and, eq, ne } from 'drizzle-orm'
 import { NextResponse } from 'next/server'
 import { z } from 'zod'
 import { db } from '@/lib/db'
-import { productVariants, products } from '@/lib/db/schema'
+import { orderItems, productVariants, products } from '@/lib/db/schema'
 import { requireAdmin } from '@/lib/server/auth'
 
 const updateInput = z.object({
@@ -69,9 +69,28 @@ export async function DELETE(request: Request, context: RouteContext) {
   const access = await requireAdmin(request)
   if ('response' in access) return access.response
   const { id } = await context.params
-  await db.transaction(async (tx) => {
-    await tx.update(products).set({ active: false, updatedAt: new Date() }).where(eq(products.id, id))
-    await tx.update(productVariants).set({ active: false }).where(eq(productVariants.productId, id))
+
+  const result = await db.transaction(async (tx) => {
+    const [product] = await tx.select({ id: products.id }).from(products)
+      .where(eq(products.id, id))
+      .for('update')
+      .limit(1)
+    if (!product) return 'not-found'
+
+    const [orderItem] = await tx.select({ id: orderItems.id }).from(orderItems)
+      .where(eq(orderItems.productId, id))
+      .limit(1)
+    if (orderItem) {
+      await tx.update(products).set({ active: false, updatedAt: new Date() }).where(eq(products.id, id))
+      await tx.update(productVariants).set({ active: false }).where(eq(productVariants.productId, id))
+      return 'archived'
+    }
+
+    await tx.delete(productVariants).where(eq(productVariants.productId, id))
+    await tx.delete(products).where(eq(products.id, id))
+    return 'deleted'
   })
-  return NextResponse.json({ ok: true })
+
+  if (result === 'not-found') return NextResponse.json({ error: 'Produk tidak ditemukan.' }, { status: 404 })
+  return NextResponse.json({ ok: true, archived: result === 'archived' })
 }
