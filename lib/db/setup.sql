@@ -18,6 +18,8 @@ CREATE TABLE IF NOT EXISTS products (
   updated_at timestamptz NOT NULL DEFAULT now()
 );
 
+ALTER TABLE products ADD COLUMN IF NOT EXISTS skin_type text NOT NULL DEFAULT 'Semua jenis';
+
 CREATE TABLE IF NOT EXISTS product_variants (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   product_id uuid NOT NULL REFERENCES products(id),

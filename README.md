@@ -92,7 +92,7 @@ erDiagram
 - Login mengarahkan admin langsung ke `/admin`; pembeli masuk ke katalog/pesanan dan tidak melihat tautan Admin.
 - Setiap pesanan dan baris pesanan dibatasi ke user yang sedang login.
 - Hanya admin yang dapat membaca panel inventori dan mengubah produk atau varian.
-- Produk yang belum pernah dipesan dihapus permanen; produk yang sudah tercatat di pesanan diarsipkan agar riwayat tetap utuh.
+- Produk tanpa riwayat pesanan dapat dihapus permanen; produk yang sudah tercatat dalam pesanan diarsipkan agar riwayat tetap utuh.
 - Checkout membuat pesanan dengan status `pending_payment` tanpa mengurangi stok.
 - Pembayaran hanya mengubah status menjadi `paid` dan mengurangi stok bila semua varian masih memiliki persediaan yang cukup; jika salah satu gagal, transaksi dibatalkan seluruhnya.
 - Pembatalan hanya berlaku untuk pesanan `pending_payment` dan tidak mengurangi stok.
