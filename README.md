@@ -9,7 +9,12 @@ Aplikasi tes teknis Fullstack Developer: katalog produk skincare, pilihan varian
 
 ## Akun demo
 
-Autentikasi memakai Neon Managed Auth. Gunakan akun pembeli `demo.buyer@lumiere.test` dan akun admin `demo.admin@lumiere.test`. Alamat admin harus tercantum di `ADMIN_EMAILS` Vercel. Kata sandi aktif dibagikan langsung kepada reviewer, bukan disimpan di repository publik.
+Autentikasi memakai Neon Managed Auth. Gunakan kredensial demo berikut:
+
+- **Pembeli:** `demo.buyer@lumiere.test` / `LumiereDemo!2026`
+- **Admin:** `demo.admin@lumiere.test` / `LumiereAdmin!2026`
+
+Akun ini khusus untuk reviewer dan berisi data tes; akun admin dapat mengubah katalog. Jangan gunakan kata sandi ini di layanan lain.
 
 ## ERD
 
