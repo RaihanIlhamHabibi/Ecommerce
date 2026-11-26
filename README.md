@@ -35,15 +35,16 @@ erDiagram
   }
   PRODUCT_VARIANTS {
     uuid id PK
-    uuid product_id
+    uuid product_id FK
     text name
     integer price
     integer stock
     boolean active
+    timestamptz created_at
   }
   ORDERS {
     uuid id PK
-    text buyer_auth_user_id
+    text buyer_auth_user_id FK
     text status
     integer total
     timestamptz created_at
@@ -51,20 +52,21 @@ erDiagram
   }
   ORDER_ITEMS {
     uuid id PK
-    uuid order_id
-    uuid product_id
-    uuid variant_id
+    uuid order_id FK
+    uuid product_id FK
+    uuid variant_id FK
     text product_name
     text variant_name
     integer unit_price
     integer quantity
     integer line_total
+    timestamptz created_at
   }
-  PRODUCTS ||--|{ PRODUCT_VARIANTS : memiliki
-  APP_USERS ||--o{ ORDERS : membuat
-  ORDERS ||--|{ ORDER_ITEMS : berisi
-  PRODUCTS ||--o{ ORDER_ITEMS : snapshot_produk
-  PRODUCT_VARIANTS ||--o{ ORDER_ITEMS : snapshot_varian
+  PRODUCTS ||--|{ PRODUCT_VARIANTS : product_id
+  APP_USERS ||--o{ ORDERS : buyer_auth_user_id
+  ORDERS ||--|{ ORDER_ITEMS : order_id
+  PRODUCTS ||--o{ ORDER_ITEMS : product_id_snapshot
+  PRODUCT_VARIANTS ||--o{ ORDER_ITEMS : variant_id_snapshot
 ```
 
 ## Arsitektur dan deployment
